@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status, Response
 from sqlalchemy.orm import Session
 
 from .database import get_db
@@ -113,11 +113,12 @@ def update_recipe(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a recipe",
+    response_class=Response,
 )
 def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),
     db: Session = Depends(get_db),
-) -> None:
+) -> Response:
     """Delete a recipe by ID.
 
     Note: For 204 No Content responses, no body must be returned.
@@ -127,5 +128,5 @@ def delete_recipe(
     if not model:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Recipe not found")
     repo.delete(model)
-    # Do not return any value to comply with 204 No Content semantics.
-    return
+    # Explicitly return an empty Response to ensure no body for 204 No Content
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
