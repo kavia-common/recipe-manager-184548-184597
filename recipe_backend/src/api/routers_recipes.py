@@ -113,6 +113,8 @@ def update_recipe(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a recipe",
+    # IMPORTANT: Do not set response_model or responses with content for 204
+    # to avoid FastAPI inferring a body, which would violate 204 semantics.
 )
 def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),

@@ -60,6 +60,16 @@ def create_app() -> FastAPI:
         """Basic health check endpoint."""
         return {"message": "Healthy"}
 
+    @app.get(
+        "/healthz",
+        tags=["Health"],
+        summary="Detailed Health Check",
+        description="Kubernetes-style health endpoint that returns 200 OK when the service is ready.",
+    )
+    def healthz():
+        """Readiness probe endpoint returning simple OK JSON."""
+        return {"status": "ok"}
+
     # Note: To seed example data, POST to /recipes with:
     # {
     #   "title": "Pasta Primavera",
