@@ -111,10 +111,9 @@ def update_recipe(
 # PUBLIC_INTERFACE
 @router.delete(
     "/{id}",
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=204,
     summary="Delete a recipe",
-    # IMPORTANT: Do not set response_model or responses with content for 204
-    # to avoid FastAPI inferring a body, which would violate 204 semantics.
+    responses={204: {"description": "Deleted"}},
 )
 def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),
@@ -130,4 +129,4 @@ def delete_recipe(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Recipe not found")
     repo.delete(model)
     # Explicitly return an empty Response to ensure no body for 204 No Content
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return Response(status_code=204)
