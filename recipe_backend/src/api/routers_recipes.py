@@ -113,12 +113,11 @@ def update_recipe(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a recipe",
-    response_class=Response,
 )
 def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),
     db: Session = Depends(get_db),
-) -> Response:
+):
     """Delete a recipe by ID.
 
     Note: For 204 No Content responses, no body must be returned.
