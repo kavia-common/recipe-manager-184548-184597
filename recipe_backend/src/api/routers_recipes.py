@@ -113,15 +113,15 @@ def update_recipe(
     "/{id}",
     status_code=204,
     summary="Delete a recipe",
-    responses={204: {"description": "Deleted"}},
 )
 def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),
     db: Session = Depends(get_db),
 ):
-    """Delete a recipe by ID.
+    """Delete a recipe by ID and return no content.
 
-    Note: For 204 No Content responses, no body must be returned.
+    This endpoint returns 204 No Content with an empty body. Do not attach any
+    response_model, response_class, or default return value to 204 routes.
     """
     repo = RecipeRepository(db)
     model = repo.get(id)
