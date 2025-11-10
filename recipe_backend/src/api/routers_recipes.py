@@ -118,10 +118,14 @@ def delete_recipe(
     id: int = Path(..., ge=1, description="Recipe ID"),
     db: Session = Depends(get_db),
 ) -> None:
-    """Delete a recipe by ID."""
+    """Delete a recipe by ID.
+
+    Note: For 204 No Content responses, no body must be returned.
+    """
     repo = RecipeRepository(db)
     model = repo.get(id)
     if not model:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Recipe not found")
     repo.delete(model)
-    return None
+    # Do not return any value to comply with 204 No Content semantics.
+    return
